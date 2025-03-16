@@ -68,3 +68,105 @@ Finalmente, se comprueba si hubo errores, si error == 0, significa que hay un di
 
 ### Ejercicio práctico 2
 
+En este ejercicio, se conectan dos dispositivos al bus I2C: un sensor de temperatura y humedad, y un display OLED. El objetivo es leer la temperatura y la humedad del sensor y mostrarlas en el display.
+
+### Código del Programa
+```cpp
+#include <Adafruit_AHTX0.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+#include <Wire.h>
+
+#define SCREEN_WIDTH 128 // Ancho de la pantalla OLED, en píxeles
+#define SCREEN_HEIGHT 32 // Alto de la pantalla OLED, en píxeles
+
+#define OLED_RESET -1 // Pin de reset (o -1 si se comparte el pin de reset del Arduino)
+#define SCREEN_ADDRESS 0x3C ///< Ver la hoja de datos para la dirección; 0x3D para 128x64, 0x3C para 128x32
+
+#define AHTX0_I2C_SCL 6
+#define AHTX0_I2C_SDA 5
+
+#define OLED_SDA 16
+#define OLED_SCL 17
+
+Adafruit_AHTX0 aht;
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire1, OLED_RESET);
+
+void setup() {
+  Wire.begin(AHTX0_I2C_SDA, AHTX0_I2C_SCL);
+  Wire1.begin(OLED_SDA, OLED_SCL);
+  Serial.begin(115200);
+  Serial.println("Adafruit AHT10/AHT20 demo!");
+
+  if (!aht.begin()) {
+    Serial.println("¡No se pudo encontrar el AHT! ¡Verifique la conexión!");
+    while (1) delay(10);
+  }
+  Serial.println("AHT10 o AHT20 encontrado");
+
+  if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
+    Serial.println(F("¡Error al asignar memoria para SSD1306!"));
+    for(;;);
+  }
+
+  display.display();
+  delay(2000);
+  display.clearDisplay();
+}
+
+void loop() {
+  sensors_event_t humidity, temp;
+  aht.getEvent(&humidity, &temp); // Obtener los objetos de temperatura y humedad con datos actualizados
+
+  display.clearDisplay();
+
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(0, 0);
+  display.print("Temperatura: ");
+  display.println(temp.temperature);
+  display.print("Humedad: ");
+  display.println(humidity.relative_humidity);
+
+  display.display();
+  
+  Serial.print("Temperatura: ");
+  Serial.print(temp.temperature);
+  Serial.println(" grados C");
+  Serial.print("Humedad: ");
+  Serial.print(humidity.relative_humidity);
+  Serial.println("% HR");
+
+  delay(500);
+}
+```
+
+Para poder llevar a cabo el código y hacerlo funcionar, hemos tenido que instalar las librerias para el sensor y para el display. Este proceso ha sido el que más nos ha complicado la práctica, ya que en cuanto a la creación del código, nos hemos ayudado de chat gpt, lo cúal ha hecho mucho menos tediosa la creación del código.
+
+Se incluyen las librerías necesarias: Adafruit_AHTX0.h, Adafruit_GFX.h, Adafruit_SSD1306.h, y Wire.h. Se definen las constantes para la pantalla OLED. Se crean instancias para el sensor y el display utilizando las clases de las librerías de Adafruit. Configuración:
+
+### FUNCIONAMIENTO
+
+En la función setup(), se inicializan las comunicaciones I2C y serial, se verifica la conexión con el sensor AHTX0 y se inicializa la pantalla OLED. Si hay algún error en alguna de estas etapas, el programa se detiene.
+
+En el loop(), se obtienen los datos de temperatura y humedad del sensor AHTX0. Estos datos se muestran en la pantalla OLED y se envían por el puerto serial para su visualización en la computadora. El bucle se repite cada 500 milisegundos.
+
+Las salidas en el print serán:
+    Mensajes indicando el estado del sensor AHTX10
+
+```cpp
+if (!aht.begin()) {
+Serial.println("¡No se pudo encontrar el AHT! ¡Verifique la conexión!"); //COMPROBAR SI EL **SENSOR** ESTA DISPONIBLE
+while (1) delay(10);
+}
+Serial.println("AHT10 o AHT20 encontrado");
+
+if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
+Serial.println(F("¡Error al asignar memoria para SSD1306!")); //COMPROBAR SI EL **DISPLAY** ESTA DISPONIBLE
+for(;;);
+}
+
+- Temperatura: <24,65> grados C" y "Humedad: <42,89> % HR.
+```
+
+Por último, también saldrán mensajes de error si no se puede encontrar el sensor AHTX0.
