@@ -53,7 +53,6 @@ La función Wire.beginTransmission(address), inicia una transmisión hacia un di
   Address: es el argumento que especifica la dirección del dispositivo al que se enviarán los datos
 
 La función Wire.endTransmission(), finaliza la transmisión I2C y envía los datos almacenados. Devuelve un valor que indicará el estado de transmisión
-
 0: éxito
 1: error de datos
 2: error de dirección
