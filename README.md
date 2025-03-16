@@ -52,11 +52,12 @@ El escáner comienza en el void_loop(). Como mencioné al principio, necesitamos
 La función Wire.beginTransmission(address), inicia una transmisión hacia un dispositivo en el bus I2C.
   Address: es el argumento que especifica la dirección del dispositivo al que se enviarán los datos
 
-La función Wire.endTransmission(), finaliza la transmisión I2C y envía los datos almacenados. Devuelve un valor que indicará el estado de transmisión:
-    - 0: éxito
-    - 1: error de datos
-    - 2: error de dirección
-    - 3: otro error
+La función `Wire.endTransmission()` finaliza la transmisión I2C y envía los datos almacenados. Devuelve un valor que indicará el estado de transmisión:
+
+- **0**: éxito  
+- **1**: error de datos  
+- **2**: error de dirección  
+- **3**: otro error  
 
 Iteramos a través de las direcciones de los dispositivos I2C del 1 al 127, inicializando nDevices en 0.
 ```
