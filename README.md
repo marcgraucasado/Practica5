@@ -3,8 +3,7 @@
 ## PRÁCTICA 5: Buses de Comunicación I (Introducción y I2C)
 
 #### Ejercicio Practico 1 ESCÁNER I2C
-```
-cpp
+```cpp
 #include <Arduino.h>
 #include <Wire.h>
 
