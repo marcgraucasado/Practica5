@@ -4,6 +4,7 @@
 
 #### Ejercicio Practico 1 ESCÁNER I2C
 ```
+cpp
 #include <Arduino.h>
 #include <Wire.h>
 
