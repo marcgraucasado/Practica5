@@ -2,7 +2,7 @@
 
 ## PRÁCTICA 5: Buses de Comunicación 1 (Introducción y I2C)
 
-#### Ejercicio Practico 1 ESCÁNER I2C
+### Ejercicio Practico 1 ESCÁNER I2C
 ```cpp
 #include <Arduino.h>
 #include <Wire.h>
@@ -35,7 +35,7 @@ void loop() {
 }
 ```
 
-Descripción y funcionamiento:
+### Descripción y funcionamiento:
 
 Este programa es un escáner o herramienta de reconocimiento de periféricos conectados a un bus I2C.
 
